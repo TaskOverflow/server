@@ -2,12 +2,25 @@ package taskoverflow
 
 import org.springframework.context.MessageSource
 import ovh.garcon.tasko.*
-
+import grails.converters.JSON
+import org.codehaus.groovy.grails.*
 class BootStrap {
 
     def springSecurityService
 
     def init = { servletContext ->
+
+        JSON.registerObjectMarshaller(Question) {
+            def returnArray = [:]
+            returnArray['id'] = it.id
+            returnArray['question'] = it.question
+            returnArray['title'] = it.title
+            returnArray['isSolved'] = it.isSolved
+            returnArray['user'] = it.user
+            returnArray['tags'] = it.tags
+
+            return returnArray
+        }
 
         //definition of badges
         def badgeSuperman = new Badge(label: "Superman", description: "badges.superman.desc", value: 10, users: []).save(failOnError: true)
