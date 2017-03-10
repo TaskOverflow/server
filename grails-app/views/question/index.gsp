@@ -3,26 +3,35 @@
     <head>
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'question.label', default: 'Question')}" />
-        <title><g:message code="default.list.label" args="[entityName]" /></title>
+        <title>TaskOverflow</title>
     </head>
-    <body>
-        <a href="#list-question" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-        <div class="nav" role="navigation">
-            <ul>
-                <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-                <li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
-            </ul>
-        </div>
-        <div id="list-question" class="content scaffold-list" role="main">
-            <h1><g:message code="default.list.label" args="[entityName]" /></h1>
-            <g:if test="${flash.message}">
-                <div class="message" role="status">${flash.message}</div>
-            </g:if>
-            <f:table collection="${questionList}" />
+    <body class="container-fluid">
+        <section class="row">
+            <h1 class="col-sm-offset-1 col-xs-10"><g:message code="home.welcome"/></h1>
 
-            <div class="pagination">
-                <g:paginate total="${questionCount ?: 0}" />
+            <p class="col-xs-12 col-sm-offset-1 col-sm-10 text-justify"><g:message code="home.presentation"/></p>
+
+            <h1 class="col-sm-offset-2 col-xs-8 page-title"><g:message code="home.nav.questions"/></h1>
+            <div class="col-xs-offset-1 col-xs-10">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="text-center"><g:message code="message.solved"/></th>
+                        <th class="text-center"><g:message code="message.value"/></th>
+                        <th class="text-center"><g:message code="message.question"/></th>
+                        <th class="text-center"><g:message code="home.nav.tags"/></th>
+                        <th class="text-center"><g:message code="message.date"/></th>
+                        <th class="text-center"><g:message code="message.author"/></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <g:each in="${ questionList }" var="q">
+                        <g:render template="/question/displayInlineQuestion" model="['q':q]" />
+                    </g:each>
+                    </tbody>
+                </table>
             </div>
-        </div>
+
+        </section>
     </body>
 </html>

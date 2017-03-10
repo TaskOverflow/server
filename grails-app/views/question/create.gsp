@@ -3,18 +3,12 @@
     <head>
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'question.label', default: 'Question')}" />
-        <title><g:message code="default.create.label" args="[entityName]" /></title>
+        <title><g:message code="home.nav.ask"/></title>
     </head>
-    <body>
-        <a href="#create-question" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-        <div class="nav" role="navigation">
-            <ul>
-                <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-                <li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-            </ul>
-        </div>
-        <div id="create-question" class="content scaffold-create" role="main">
-            <h1><g:message code="default.create.label" args="[entityName]" /></h1>
+    <body class="container-fluid">
+    <br/>
+        <div id="create-question" class="col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8 content panel panel-default" role="main">
+            <h1 class="page-title"><g:message code="home.nav.ask"/></h1>
             <g:if test="${flash.message}">
             <div class="message" role="status">${flash.message}</div>
             </g:if>
@@ -25,12 +19,25 @@
                 </g:eachError>
             </ul>
             </g:hasErrors>
-            <g:form action="save">
+            <g:form action="save" resource="${this.question}">
                 <fieldset class="form">
-                    <f:all bean="question"/>
+                    <f:field property="title" bean="question" class="form-control">
+                        <input name="title" type="title" class="form-control">
+                    </f:field>
+
+                    <f:field property="tags" bean="question" class="form-control"/>
+                    <div style="display: none">
+                        <f:field property="isSolved" value="false" bean="question" class="hiddenField"/>
+                    </div>
+                    <f:field property="question.content" bean="question" class="form-control">
+                        <g:textArea name="content" class="form-control" style="height: 200px"/>
+                    </f:field>
+                    <g:hiddenField name="mycontent" value="${content}"/>
+                    <g:hiddenField name="username" value="${sec.username()}"/>
+
                 </fieldset>
-                <fieldset class="buttons">
-                    <g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
+                <fieldset class="text-center">
+                    <g:submitButton name="create" class="btn btn-default" value="${message(code: 'other.send')}" />
                 </fieldset>
             </g:form>
         </div>

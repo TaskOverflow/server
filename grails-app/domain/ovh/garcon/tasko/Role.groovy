@@ -1,8 +1,16 @@
 package ovh.garcon.tasko
 
+/**
+ * @author Benoît Garçon
+ * @date Jan-2017
+ */
+
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 
+/**
+ * Role class for security
+ */
 @EqualsAndHashCode(includes='authority')
 @ToString(includes='authority', includeNames=true, includePackage=false)
 class Role implements Serializable {

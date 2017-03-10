@@ -10,19 +10,12 @@ class QuestionMessageControllerSpec extends Specification {
     def populateValidParams(params) {
         assert params != null
 
-        // TODO: Populate valid properties like...
-        //params["name"] = 'someValidName'
-        assert false, "TODO: Provide a populateValidParams() implementation for this generated test suite"
-    }
 
-    void "Test the index action returns the correct model"() {
-
-        when:"The index action is executed"
-            controller.index()
-
-        then:"The model is correct"
-            !model.questionMessageList
-            model.questionMessageCount == 0
+        params["content"] = 'bonjour'
+        params["date"] = new Date()
+        params["value"] = 0
+        params["user"] = new User(username: "b", password: "p")
+        params["question"] = new Question(id: 1)
     }
 
     void "Test the create action returns the correct model"() {
@@ -54,25 +47,9 @@ class QuestionMessageControllerSpec extends Specification {
             controller.save(questionMessage)
 
         then:"A redirect is issued to the show action"
-            response.redirectedUrl == '/questionMessage/show/1'
+            response.redirectedUrl.contains '/question/show'
             controller.flash.message != null
             QuestionMessage.count() == 1
-    }
-
-    void "Test that the show action returns the correct model"() {
-        when:"The show action is executed with a null domain"
-            controller.show(null)
-
-        then:"A 404 error is returned"
-            response.status == 404
-
-        when:"A domain instance is passed to the show action"
-            populateValidParams(params)
-            def questionMessage = new QuestionMessage(params)
-            controller.show(questionMessage)
-
-        then:"A model is populated containing the domain instance"
-            model.questionMessage == questionMessage
     }
 
     void "Test that the edit action returns the correct model"() {
@@ -119,7 +96,7 @@ class QuestionMessageControllerSpec extends Specification {
 
         then:"A redirect is issued to the show action"
             questionMessage != null
-            response.redirectedUrl == "/questionMessage/show/$questionMessage.id"
+            response.redirectedUrl.contains "/question/show"
             flash.message != null
     }
 

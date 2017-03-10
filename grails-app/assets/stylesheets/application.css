@@ -13,3 +13,64 @@
 *= require mobile
 *= require_self
 */
+
+.page-title {
+    color: #D40000;
+    font-size: x-large;
+}
+
+.my-image {
+    width: auto;
+    height: auto;
+}
+
+.fix-image {
+    height: 64px;
+    width: auto;
+}
+
+.profil-image {
+    height: 64px;
+    width: 64px;
+}
+
+.icon-image {
+    height: 1em;
+    width: 1em;
+}
+
+.my-list {
+    list-style:none;
+}
+
+.gold {
+    background-color: gold;
+    color: #FF0000;
+    border: 1px solid #EEE;
+}
+
+.questionStyle {
+    background-color: #ffff88;
+}
+
+.answerStyle {
+    background-color: #eeeeff;
+}
+
+.badgeSize {
+    height: 180px;
+}
+
+.coms {
+    border-top: 2px dotted;
+}
+
+.my-btn {
+    display: inline-block;
+    text-decoration: none;
+}
+
+.small-profil-image {
+    height: 2em;
+    width: auto;
+}

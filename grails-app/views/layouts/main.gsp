@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="no-js">
+<html class="no-js">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -7,9 +7,9 @@
         <g:layoutTitle default="TaskOverflow"/>
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
 
     <asset:stylesheet src="application.css"/>
-
     <g:layoutHead/>
 </head>
 <body>
@@ -31,7 +31,19 @@
             </div>
             <div class="navbar-collapse collapse" aria-expanded="false" style="height: 0.8px;">
                 <ul class="nav navbar-nav navbar-right">
-                    <g:pageProperty name="page.nav" />
+                    <li><g:link controller="question"><g:message code="home.nav.questions"/></g:link></li>
+                    <li><g:link controller="tag"><g:message code="home.nav.tags"/></g:link></li>
+                    <li><g:link controller="badge"><g:message code="home.nav.badges"/></g:link></li>
+                    <li><g:link controller="user"><g:message code="home.nav.users"/></g:link></li>
+                    <sec:ifNotLoggedIn>
+                        <li><g:link controller="user" action="create"><g:message code="home.nav.signin"/></g:link></li>
+                        <li><g:link controller="login"><g:message code="home.nav.login"/></g:link></li>
+                    </sec:ifNotLoggedIn>
+                    <sec:ifLoggedIn>
+                        <li><g:link controller="user" action="show" id="${sec.loggedInUserInfo(field: 'id')}"><sec:loggedInUserInfo field="username"/></g:link></li>
+                        <li><g:link controller="logout"><g:message code="home.nav.logout"/></g:link></li>
+                        <li class="gold"><g:link controller="question" action="create"><g:message code="home.nav.ask"/></g:link></li>
+                    </sec:ifLoggedIn>
                 </ul>
             </div>
         </div>

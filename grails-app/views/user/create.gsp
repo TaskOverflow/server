@@ -3,18 +3,13 @@
     <head>
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'user.label', default: 'User')}" />
-        <title><g:message code="default.create.label" args="[entityName]" /></title>
+        <title><g:message code="home.nav.signin" /></title>
     </head>
-    <body>
-        <a href="#create-user" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-        <div class="nav" role="navigation">
-            <ul>
-                <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-                <li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-            </ul>
-        </div>
-        <div id="create-user" class="content scaffold-create" role="main">
-            <h1><g:message code="default.create.label" args="[entityName]" /></h1>
+    <body class="container-fluid">
+    <br/>
+    <div class="panel panel-danger col-xs-offset-1 col-sm-offset-2 col-xs-10 col-sm-8 col-md-offset-3 col-md-6 form-group">
+        <div id="create-user" class="panel-body text-center" role="main">
+            <h1 class="page-title"><g:message code="home.nav.signin"/></h1>
             <g:if test="${flash.message}">
             <div class="message" role="status">${flash.message}</div>
             </g:if>
@@ -25,14 +20,15 @@
                 </g:eachError>
             </ul>
             </g:hasErrors>
-            <g:form action="save">
-                <fieldset class="form">
+            <g:form action="save" class="form">
+                <fieldset class="form-inline form-group">
                     <f:all bean="user"/>
                 </fieldset>
-                <fieldset class="buttons">
-                    <g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
+                <fieldset class="text-center">
+                    <g:submitButton class="btn btn-default form-inline" name="create" value="${g.message(code:'other.send')}" />
                 </fieldset>
             </g:form>
         </div>
+    </div>
     </body>
 </html>

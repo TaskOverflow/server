@@ -3,19 +3,15 @@
     <head>
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'user.label', default: 'User')}" />
-        <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <title><g:message code="default.button.edit.label" /></title>
     </head>
-    <body>
-        <a href="#edit-user" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-        <div class="nav" role="navigation">
-            <ul>
-                <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-                <li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-                <li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
-            </ul>
-        </div>
-        <div id="edit-user" class="content scaffold-edit" role="main">
-            <h1><g:message code="default.edit.label" args="[entityName]" /></h1>
+    <body class="container-fluid">
+        <br/>
+        <h1 class="col-xs-offset-1 col-sm-offset-2 page-title"><g:link controller="user" action="show" id="${user.id}"><g:message code="other.back"/></g:link> > <g:message code="default.button.edit.label"/> </h1>
+
+        <div id="edit-user" class="col-xs-offset-1 col-xs-10 col-sm-offset-3 col-sm-6 content panel panel-danger text-center" role="main">
+            <g:if test="${sec.username()==user.username}">
+                <div class="panel-body">
             <g:if test="${flash.message}">
             <div class="message" role="status">${flash.message}</div>
             </g:if>
@@ -31,10 +27,32 @@
                 <fieldset class="form">
                     <f:all bean="user"/>
                 </fieldset>
-                <fieldset class="buttons">
-                    <input class="save" type="submit" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+                <fieldset class="text-center">
+                    <input class="btn btn-default form-inline" type="submit" value="${message(code: 'other.send')}" />
                 </fieldset>
             </g:form>
+                </div>
+            </g:if>
+            <g:else>
+                <ul class="errors" role="alert"><g:message code="access.forbidden"/> </ul>
+            </g:else>
         </div>
     </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

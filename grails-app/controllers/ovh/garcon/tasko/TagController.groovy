@@ -1,10 +1,20 @@
 package ovh.garcon.tasko
 
+/**
+ * @author Benoît Garçon
+ * @date Jan-2017
+ */
+
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
+/**
+ * Manage Tags
+ */
 @Transactional(readOnly = true)
 class TagController {
+
+    static responseFormats = ['json', 'xml']
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -15,10 +25,6 @@ class TagController {
 
     def show(Tag tag) {
         respond tag
-    }
-
-    def create() {
-        respond new Tag(params)
     }
 
     @Transactional
@@ -46,10 +52,6 @@ class TagController {
         }
     }
 
-    def edit(Tag tag) {
-        respond tag
-    }
-
     @Transactional
     def update(Tag tag) {
         if (tag == null) {
@@ -72,26 +74,6 @@ class TagController {
                 redirect tag
             }
             '*'{ respond tag, [status: OK] }
-        }
-    }
-
-    @Transactional
-    def delete(Tag tag) {
-
-        if (tag == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        tag.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'tag.label', default: 'Tag'), tag.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
         }
     }
 

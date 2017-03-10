@@ -4,25 +4,17 @@ import grails.test.mixin.*
 import spock.lang.*
 
 @TestFor(ComMessageController)
-@Mock(ComMessage)
+@Mock([ComMessage,User,BadgatorService])
 class ComMessageControllerSpec extends Specification {
 
     def populateValidParams(params) {
         assert params != null
 
-        // TODO: Populate valid properties like...
-        //params["name"] = 'someValidName'
-        assert false, "TODO: Provide a populateValidParams() implementation for this generated test suite"
-    }
-
-    void "Test the index action returns the correct model"() {
-
-        when:"The index action is executed"
-            controller.index()
-
-        then:"The model is correct"
-            !model.comMessageList
-            model.comMessageCount == 0
+        params["content"] = 'bonjour'
+        params["date"] = new Date()
+        params["value"] = 0
+        params["user"] = new User(username: "b", password: "p")
+        params["question"] = new Question(id: 1)
     }
 
     void "Test the create action returns the correct model"() {
@@ -57,96 +49,5 @@ class ComMessageControllerSpec extends Specification {
             response.redirectedUrl == '/comMessage/show/1'
             controller.flash.message != null
             ComMessage.count() == 1
-    }
-
-    void "Test that the show action returns the correct model"() {
-        when:"The show action is executed with a null domain"
-            controller.show(null)
-
-        then:"A 404 error is returned"
-            response.status == 404
-
-        when:"A domain instance is passed to the show action"
-            populateValidParams(params)
-            def comMessage = new ComMessage(params)
-            controller.show(comMessage)
-
-        then:"A model is populated containing the domain instance"
-            model.comMessage == comMessage
-    }
-
-    void "Test that the edit action returns the correct model"() {
-        when:"The edit action is executed with a null domain"
-            controller.edit(null)
-
-        then:"A 404 error is returned"
-            response.status == 404
-
-        when:"A domain instance is passed to the edit action"
-            populateValidParams(params)
-            def comMessage = new ComMessage(params)
-            controller.edit(comMessage)
-
-        then:"A model is populated containing the domain instance"
-            model.comMessage == comMessage
-    }
-
-    void "Test the update action performs an update on a valid domain instance"() {
-        when:"Update is called for a domain instance that doesn't exist"
-            request.contentType = FORM_CONTENT_TYPE
-            request.method = 'PUT'
-            controller.update(null)
-
-        then:"A 404 error is returned"
-            response.redirectedUrl == '/comMessage/index'
-            flash.message != null
-
-        when:"An invalid domain instance is passed to the update action"
-            response.reset()
-            def comMessage = new ComMessage()
-            comMessage.validate()
-            controller.update(comMessage)
-
-        then:"The edit view is rendered again with the invalid instance"
-            view == 'edit'
-            model.comMessage == comMessage
-
-        when:"A valid domain instance is passed to the update action"
-            response.reset()
-            populateValidParams(params)
-            comMessage = new ComMessage(params).save(flush: true)
-            controller.update(comMessage)
-
-        then:"A redirect is issued to the show action"
-            comMessage != null
-            response.redirectedUrl == "/comMessage/show/$comMessage.id"
-            flash.message != null
-    }
-
-    void "Test that the delete action deletes an instance if it exists"() {
-        when:"The delete action is called for a null instance"
-            request.contentType = FORM_CONTENT_TYPE
-            request.method = 'DELETE'
-            controller.delete(null)
-
-        then:"A 404 is returned"
-            response.redirectedUrl == '/comMessage/index'
-            flash.message != null
-
-        when:"A domain instance is created"
-            response.reset()
-            populateValidParams(params)
-            def comMessage = new ComMessage(params).save(flush: true)
-
-        then:"It exists"
-            ComMessage.count() == 1
-
-        when:"The domain instance is passed to the delete action"
-            controller.delete(comMessage)
-
-        then:"The instance is deleted"
-            ComMessage.count() == 0
-            response.redirectedUrl == '/comMessage/index'
-            flash.message != null
     }
 }

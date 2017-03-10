@@ -1,16 +1,30 @@
 package ovh.garcon.tasko
 
+/**
+ * @author Benoît Garçon
+ * @date Jan-2017
+ */
+
 import grails.gorm.DetachedCriteria
 import groovy.transform.ToString
 
 import org.apache.commons.lang.builder.HashCodeBuilder
 
+/**
+ * Class between User and Role
+ */
 @ToString(cache=true, includeNames=true, includePackage=false)
 class UserRole implements Serializable {
 
 	private static final long serialVersionUID = 1
 
+	/**
+	 * User linked
+	 */
 	User user
+	/**
+	 * Role linked
+	 */
 	Role role
 
 	@Override

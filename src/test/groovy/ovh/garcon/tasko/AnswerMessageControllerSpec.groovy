@@ -4,33 +4,17 @@ import grails.test.mixin.*
 import spock.lang.*
 
 @TestFor(AnswerMessageController)
-@Mock(AnswerMessage)
+@Mock([AnswerMessage, User, BadgatorService])
 class AnswerMessageControllerSpec extends Specification {
 
     def populateValidParams(params) {
         assert params != null
 
-        // TODO: Populate valid properties like...
-        //params["name"] = 'someValidName'
-        assert false, "TODO: Provide a populateValidParams() implementation for this generated test suite"
-    }
-
-    void "Test the index action returns the correct model"() {
-
-        when:"The index action is executed"
-            controller.index()
-
-        then:"The model is correct"
-            !model.answerMessageList
-            model.answerMessageCount == 0
-    }
-
-    void "Test the create action returns the correct model"() {
-        when:"The create action is executed"
-            controller.create()
-
-        then:"The model is correctly created"
-            model.answerMessage!= null
+        params["content"] = 'bonjour'
+        params["date"] = new Date()
+        params["value"] = 0
+        params["user"] = new User(username: "b", password: "p")
+        params["question"] = new Question(id: 1)
     }
 
     void "Test the save action correctly persists an instance"() {
@@ -54,25 +38,9 @@ class AnswerMessageControllerSpec extends Specification {
             controller.save(answerMessage)
 
         then:"A redirect is issued to the show action"
-            response.redirectedUrl == '/answerMessage/show/1'
+            response.redirectedUrl.contains '/question/show'
             controller.flash.message != null
             AnswerMessage.count() == 1
-    }
-
-    void "Test that the show action returns the correct model"() {
-        when:"The show action is executed with a null domain"
-            controller.show(null)
-
-        then:"A 404 error is returned"
-            response.status == 404
-
-        when:"A domain instance is passed to the show action"
-            populateValidParams(params)
-            def answerMessage = new AnswerMessage(params)
-            controller.show(answerMessage)
-
-        then:"A model is populated containing the domain instance"
-            model.answerMessage == answerMessage
     }
 
     void "Test that the edit action returns the correct model"() {
@@ -98,7 +66,7 @@ class AnswerMessageControllerSpec extends Specification {
             controller.update(null)
 
         then:"A 404 error is returned"
-            response.redirectedUrl == '/answerMessage/index'
+            response.redirectedUrl.contains('/answerMessage/index')
             flash.message != null
 
         when:"An invalid domain instance is passed to the update action"
@@ -119,34 +87,7 @@ class AnswerMessageControllerSpec extends Specification {
 
         then:"A redirect is issued to the show action"
             answerMessage != null
-            response.redirectedUrl == "/answerMessage/show/$answerMessage.id"
-            flash.message != null
-    }
-
-    void "Test that the delete action deletes an instance if it exists"() {
-        when:"The delete action is called for a null instance"
-            request.contentType = FORM_CONTENT_TYPE
-            request.method = 'DELETE'
-            controller.delete(null)
-
-        then:"A 404 is returned"
-            response.redirectedUrl == '/answerMessage/index'
-            flash.message != null
-
-        when:"A domain instance is created"
-            response.reset()
-            populateValidParams(params)
-            def answerMessage = new AnswerMessage(params).save(flush: true)
-
-        then:"It exists"
-            AnswerMessage.count() == 1
-
-        when:"The domain instance is passed to the delete action"
-            controller.delete(answerMessage)
-
-        then:"The instance is deleted"
-            AnswerMessage.count() == 0
-            response.redirectedUrl == '/answerMessage/index'
+            response.redirectedUrl == "/question/show"
             flash.message != null
     }
 }

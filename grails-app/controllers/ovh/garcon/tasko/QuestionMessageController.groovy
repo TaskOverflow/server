@@ -1,21 +1,22 @@
 package ovh.garcon.tasko
 
+/**
+ * @author Benoît Garçon
+ * @date Jan-2017
+ */
+
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
+/**
+ * Manage message for questions
+ */
 @Transactional(readOnly = true)
 class QuestionMessageController {
 
+    static responseFormats = ['json', 'xml']
+
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
-
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond QuestionMessage.list(params), model:[questionMessageCount: QuestionMessage.count()]
-    }
-
-    def show(QuestionMessage questionMessage) {
-        respond questionMessage
-    }
 
     def create() {
         respond new QuestionMessage(params)
@@ -40,7 +41,7 @@ class QuestionMessageController {
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.created.message', args: [message(code: 'questionMessage.label', default: 'QuestionMessage'), questionMessage.id])
-                redirect questionMessage
+                redirect controller:"question", action:"show", id:questionMessage.question.id, method:"GET"
             }
             '*' { respond questionMessage, [status: CREATED] }
         }
@@ -69,7 +70,7 @@ class QuestionMessageController {
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'questionMessage.label', default: 'QuestionMessage'), questionMessage.id])
-                redirect questionMessage
+                redirect controller:"question", action:"show", id:questionMessage.question.id, method:"GET"
             }
             '*'{ respond questionMessage, [status: OK] }
         }

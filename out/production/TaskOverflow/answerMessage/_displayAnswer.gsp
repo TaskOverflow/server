@@ -1,0 +1,1 @@
+<g:render template="/myMessage/displayMessage" model="['a':a,'type':'panel-danger','style':'answerStyle']" />

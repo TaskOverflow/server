@@ -3,36 +3,24 @@
     <head>
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'comMessage.label', default: 'ComMessage')}" />
-        <title><g:message code="default.create.label" args="[entityName]" /></title>
+        <title><g:message code="other.new" /></title>
     </head>
-    <body>
-        <a href="#create-comMessage" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-        <div class="nav" role="navigation">
-            <ul>
-                <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-                <li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-            </ul>
-        </div>
-        <div id="create-comMessage" class="content scaffold-create" role="main">
-            <h1><g:message code="default.create.label" args="[entityName]" /></h1>
-            <g:if test="${flash.message}">
-            <div class="message" role="status">${flash.message}</div>
-            </g:if>
-            <g:hasErrors bean="${this.comMessage}">
-            <ul class="errors" role="alert">
-                <g:eachError bean="${this.comMessage}" var="error">
-                <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
-                </g:eachError>
-            </ul>
-            </g:hasErrors>
-            <g:form action="save">
-                <fieldset class="form">
-                    <f:all bean="comMessage"/>
-                </fieldset>
-                <fieldset class="buttons">
-                    <g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
-                </fieldset>
-            </g:form>
-        </div>
+    <body class="container-fluid">
+    <h1 class="col-sm-offset-2 page-title"><g:link controller="question" action="show" id="${params.questionId}"><g:message code="other.back"/></g:link> > <g:message code="other.new"/> </h1>
+    <div class="jumbotron col-sm-offset-2 col-xs-12 col-sm-8 form-group">
+        <g:form controller="comMessage" action="add" method="post">
+            <g:hiddenField name="qId" value="${params.questionId}" />
+            <g:hiddenField name="mId" value="${params.messageId}" />
+            <g:hiddenField name="uId" value="${sec.username()}" />
+            <div class="row">
+                <label for="content"><g:message code="message.content"/></label>
+                <g:textArea class="form-control" name="content" value="" />
+            </div>
+            <br/>
+            <div class="row text-center">
+                <g:submitButton name="add" value="${g.message(code:'other.send')}" />
+            </div>
+        </g:form>
+    </div>
     </body>
 </html>

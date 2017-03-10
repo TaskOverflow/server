@@ -1,10 +1,20 @@
 package ovh.garcon.tasko
 
+/**
+ * @author Benoît Garçon
+ * @date Jan-2017
+ */
+
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
+/**
+ * Manage badges
+ */
 @Transactional(readOnly = true)
 class BadgeController {
+
+    static responseFormats = ['json', 'xml']
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -17,10 +27,6 @@ class BadgeController {
         respond badge
     }
 
-    def create() {
-        respond new Badge(params)
-    }
-
     @Transactional
     def save(Badge badge) {
         if (badge == null) {
@@ -31,7 +37,7 @@ class BadgeController {
 
         if (badge.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond badge.errors, view:'create'
+            respond badge.errors, view:'index'
             return
         }
 
@@ -44,10 +50,6 @@ class BadgeController {
             }
             '*' { respond badge, [status: CREATED] }
         }
-    }
-
-    def edit(Badge badge) {
-        respond badge
     }
 
     @Transactional
@@ -72,26 +74,6 @@ class BadgeController {
                 redirect badge
             }
             '*'{ respond badge, [status: OK] }
-        }
-    }
-
-    @Transactional
-    def delete(Badge badge) {
-
-        if (badge == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        badge.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'badge.label', default: 'Badge'), badge.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
         }
     }
 

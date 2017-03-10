@@ -1,0 +1,12 @@
+2017-01-25 10:05:46 jdbc[7]: exception
+org.h2.jdbc.JdbcSQLException: Table "BADGE" not found; SQL statement:
+insert into badge (id, version, description, label, value) values (null, ?, ?, ?, ?) [42102-193]
+2017-01-25 10:05:46 jdbc[7]: exception
+org.h2.jdbc.JdbcSQLException: Table "BADGE" not found; SQL statement:
+insert into badge (id, version, description, label, value) values (null, ?, ?, ?, ?) [42102-193]
+2017-01-25 10:11:33 jdbc[7]: exception
+org.h2.jdbc.JdbcSQLException: Table "BADGE" not found; SQL statement:
+insert into badge (id, version, description, label, value) values (null, ?, ?, ?, ?) [42102-193]
+2017-01-25 10:11:33 jdbc[7]: exception
+org.h2.jdbc.JdbcSQLException: Table "BADGE" not found; SQL statement:
+insert into badge (id, version, description, label, value) values (null, ?, ?, ?, ?) [42102-193]

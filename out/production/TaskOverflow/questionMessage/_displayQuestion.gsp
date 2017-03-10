@@ -1,0 +1,1 @@
+<g:render template="/myMessage/displayMessage" model="['a':q.question,'type':'panel-success','style':'questionStyle']" />

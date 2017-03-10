@@ -10,9 +10,8 @@ class TagControllerSpec extends Specification {
     def populateValidParams(params) {
         assert params != null
 
-        // TODO: Populate valid properties like...
-        //params["name"] = 'someValidName'
-        assert false, "TODO: Provide a populateValidParams() implementation for this generated test suite"
+        params["label"] = 'someValidName'
+
     }
 
     void "Test the index action returns the correct model"() {
@@ -23,14 +22,6 @@ class TagControllerSpec extends Specification {
         then:"The model is correct"
             !model.tagList
             model.tagCount == 0
-    }
-
-    void "Test the create action returns the correct model"() {
-        when:"The create action is executed"
-            controller.create()
-
-        then:"The model is correctly created"
-            model.tag!= null
     }
 
     void "Test the save action correctly persists an instance"() {
@@ -75,22 +66,6 @@ class TagControllerSpec extends Specification {
             model.tag == tag
     }
 
-    void "Test that the edit action returns the correct model"() {
-        when:"The edit action is executed with a null domain"
-            controller.edit(null)
-
-        then:"A 404 error is returned"
-            response.status == 404
-
-        when:"A domain instance is passed to the edit action"
-            populateValidParams(params)
-            def tag = new Tag(params)
-            controller.edit(tag)
-
-        then:"A model is populated containing the domain instance"
-            model.tag == tag
-    }
-
     void "Test the update action performs an update on a valid domain instance"() {
         when:"Update is called for a domain instance that doesn't exist"
             request.contentType = FORM_CONTENT_TYPE
@@ -123,30 +98,4 @@ class TagControllerSpec extends Specification {
             flash.message != null
     }
 
-    void "Test that the delete action deletes an instance if it exists"() {
-        when:"The delete action is called for a null instance"
-            request.contentType = FORM_CONTENT_TYPE
-            request.method = 'DELETE'
-            controller.delete(null)
-
-        then:"A 404 is returned"
-            response.redirectedUrl == '/tag/index'
-            flash.message != null
-
-        when:"A domain instance is created"
-            response.reset()
-            populateValidParams(params)
-            def tag = new Tag(params).save(flush: true)
-
-        then:"It exists"
-            Tag.count() == 1
-
-        when:"The domain instance is passed to the delete action"
-            controller.delete(tag)
-
-        then:"The instance is deleted"
-            Tag.count() == 0
-            response.redirectedUrl == '/tag/index'
-            flash.message != null
-    }
 }

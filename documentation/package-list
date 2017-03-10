@@ -1,0 +1,7 @@
+conf
+conf.spring
+controllers.ovh.garcon.tasko
+controllers.taskoverflow
+domain.ovh.garcon.tasko
+init.taskoverflow
+services.ovh.garcon.tasko

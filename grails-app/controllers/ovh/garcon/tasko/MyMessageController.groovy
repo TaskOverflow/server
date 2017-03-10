@@ -1,28 +1,35 @@
 package ovh.garcon.tasko
 
+/**
+ * @author Benoît Garçon
+ * @date Jan-2017
+ */
+
+import grails.plugin.springsecurity.annotation.Secured
+
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
+import ovh.garcon.tasko.BadgatorService
 
+/**
+ * Manage generic messages
+ */
 @Transactional(readOnly = true)
 class MyMessageController {
 
+    static responseFormats = ['json', 'xml']
+
+    /**
+     * Gamification service
+     */
+    def badgatorService
+
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond MyMessage.list(params), model:[myMessageCount: MyMessage.count()]
-    }
-
-    def show(MyMessage myMessage) {
-        respond myMessage
-    }
-
-    def create() {
-        respond new MyMessage(params)
-    }
-
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     @Transactional
     def save(MyMessage myMessage) {
+
         if (myMessage == null) {
             transactionStatus.setRollbackOnly()
             notFound()
@@ -37,6 +44,8 @@ class MyMessageController {
 
         myMessage.save flush:true
 
+        badgatorService.serviceMethod(myMessage.getUserId()) // check badges
+
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.created.message', args: [message(code: 'myMessage.label', default: 'MyMessage'), myMessage.id])
@@ -46,6 +55,7 @@ class MyMessageController {
         }
     }
 
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def edit(MyMessage myMessage) {
         respond myMessage
     }
@@ -65,34 +75,6 @@ class MyMessageController {
         }
 
         myMessage.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'myMessage.label', default: 'MyMessage'), myMessage.id])
-                redirect myMessage
-            }
-            '*'{ respond myMessage, [status: OK] }
-        }
-    }
-
-    @Transactional
-    def delete(MyMessage myMessage) {
-
-        if (myMessage == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        myMessage.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'myMessage.label', default: 'MyMessage'), myMessage.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
     }
 
     protected void notFound() {
@@ -102,6 +84,28 @@ class MyMessageController {
                 redirect action: "index", method: "GET"
             }
             '*'{ render status: NOT_FOUND }
+        }
+    }
+
+    /**
+     * Modify the value of a message for gamification
+     * @return
+     */
+    @Secured(['ROLE_USER','ROLE_ADMIN'])
+    @Transactional
+    def vote(){
+        MyMessage item = MyMessage.get(params.mId as Integer)
+        item.value += (params.inc as Integer)
+        update(item)
+
+        badgatorService.serviceMethod(item.getUserId()) // check badges
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'answerMessage.label', default: 'Question'), item.id])
+                redirect controller:"question", action:"show", id:params.qId, method:"GET"
+            }
+            '*' { respond item, [status: CREATED] }
         }
     }
 }

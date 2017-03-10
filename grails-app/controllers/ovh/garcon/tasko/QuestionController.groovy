@@ -1,51 +1,80 @@
 package ovh.garcon.tasko
 
-import static org.springframework.http.HttpStatus.*
-import grails.transaction.Transactional
+import grails.web.Controller
 
+/**
+ * @author Benoît Garçon
+ * @date Jan-2017
+ */
+
+import static org.springframework.http.HttpStatus.*
+import grails.plugin.springsecurity.annotation.Secured
+import grails.transaction.Transactional
+import ovh.garcon.tasko.BadgatorService
+
+/**
+ * Manage questions
+ */
 @Transactional(readOnly = true)
+@Controller
 class QuestionController {
+
+    /**
+     * Gamification service
+     */
+    def badgatorService
+
+    static responseFormats = ['json', 'xml']
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Question.list(params), model:[questionCount: Question.count()]
+        respond Question.list(params)?.sort{it.getValue()}?.reverse(true), model:[questionCount: Question.count()]
     }
 
     def show(Question question) {
         respond question
     }
 
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def create() {
-        respond new Question(params)
+        respond new Question(question: new QuestionMessage())
     }
 
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     @Transactional
     def save(Question question) {
-        if (question == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
 
-        if (question.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond question.errors, view:'create'
-            return
-        }
+        def user = User.findByUsername(params.username)
 
-        question.save flush:true
+        def qm = new QuestionMessage(
+                user: user,
+                content: params.content,
+                date: new Date(),
+                value: 0
+        )
+
+        def QUE = new Question(
+                user: user,
+                question: qm,
+                isSolved: false,
+                tags: question.tags,
+                title: question.title
+        ).save(flush:true)
+
+        badgatorService.serviceMethod(QUE.getUserId()) // check badges
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'question.label', default: 'Question'), question.id])
-                redirect question
+                flash.message = message(code: 'default.created.message', args: [message(code: 'question.label', default: 'Question'), QUE.id])
+                redirect QUE
             }
-            '*' { respond question, [status: CREATED] }
+            '*' { respond QUE, [status: CREATED] }
         }
     }
 
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def edit(Question question) {
         respond question
     }
@@ -65,14 +94,6 @@ class QuestionController {
         }
 
         question.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'question.label', default: 'Question'), question.id])
-                redirect question
-            }
-            '*'{ respond question, [status: OK] }
-        }
     }
 
     @Transactional
@@ -102,6 +123,35 @@ class QuestionController {
                 redirect action: "index", method: "GET"
             }
             '*'{ render status: NOT_FOUND }
+        }
+    }
+
+    @Secured(['ROLE_USER','ROLE_ADMIN'])
+    @Transactional
+    def solve(){
+        Question item = Question.get(params.qId as Integer)
+        item.setIsSolved(true)
+
+        if (item == null) {
+            transactionStatus.setRollbackOnly()
+            notFound()
+            return
+        }
+
+        if (item.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            respond item.errors, view:'create'
+            return
+        }
+
+        item.save flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'question.label', default: 'Question'), item.id])
+                redirect controller: "question", action: "show", id: params.qId
+            }
+            '*'{ respond item, [status: OK] }
         }
     }
 }

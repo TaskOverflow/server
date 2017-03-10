@@ -1,10 +1,22 @@
 package ovh.garcon.tasko
 
+/**
+ * @author Benoît Garçon
+ * @date Jan-2017
+ */
+
+import grails.plugin.springsecurity.annotation.Secured
+
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
+/**
+ * Class for Users
+ */
 @Transactional(readOnly = true)
 class UserController {
+
+    static responseFormats = ['json', 'xml']
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -35,7 +47,16 @@ class UserController {
             return
         }
 
-        user.save flush:true
+        // profile
+        def profile = new Profile(firstname: "", lastname: "", email: "", image: "")
+        user.setProfil(profile)
+
+        // save
+        user.save(flush:true)
+
+        // authorization
+        def role = Role.findByAuthority('ROLE_USER')
+        UserRole.create user, role
 
         request.withFormat {
             form multipartForm {
@@ -75,26 +96,6 @@ class UserController {
         }
     }
 
-    @Transactional
-    def delete(User user) {
-
-        if (user == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        user.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'user.label', default: 'User'), user.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
-    }
-
     protected void notFound() {
         request.withFormat {
             form multipartForm {
@@ -102,6 +103,40 @@ class UserController {
                 redirect action: "index", method: "GET"
             }
             '*'{ render status: NOT_FOUND }
+        }
+    }
+
+    /**
+     * Used by admin to banor unban a user
+     * @param user
+     * @return
+     */
+    @Secured(['ROLE_ADMIN'])
+    @Transactional
+    def ban(User user){
+
+        if (user == null) {
+            transactionStatus.setRollbackOnly()
+            notFound()
+            return
+        }
+
+        if (user.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            respond user.errors, view:'show'
+            return
+        }
+
+        user.setAccountLocked(!user.getAccountLocked())
+
+        user.save flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'user.label', default: 'User'), user.id])
+                redirect controller: "user", action: "show", id: user.id
+            }
+            '*'{ respond user, [status: OK] }
         }
     }
 }
