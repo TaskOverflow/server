@@ -1,0 +1,28 @@
+grails create-app TaskOverflow
+
+grails create-domain-class tasko.Message
+grails create-domain-class tasko.User
+grails create-domain-class tasko.Profile
+grails create-domain-class tasko.Stats
+grails create-domain-class tasko.Administrator
+grails create-domain-class tasko.Question
+grails create-domain-class tasko.QuestionMessage
+grails create-domain-class tasko.AnswerMessage
+grails create-domain-class tasko.ComMessage
+grails create-domain-class tasko.Badge
+grails create-domain-class tasko.Tag
+
+grails generate-all tasko.MyMessage -force
+grails generate-all tasko.Profile -force
+grails generate-all tasko.User -force
+grails generate-all tasko.Stats -force
+grails generate-all tasko.Administrator -force
+grails generate-all tasko.Question -force
+grails generate-all tasko.QuestionMessage -force
+grails generate-all tasko.AnswerMessage -force
+grails generate-all tasko.ComMessage -force
+grails generate-all tasko.Badge -force
+grails generate-all tasko.Tag -force
+
+grails run-app
+
