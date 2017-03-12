@@ -23,7 +23,11 @@ class AnswerMessageController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    def show(AnswerMessage message) {
+        respond message
+    }
+
+    //@Secured(['ROLE_USER', 'ROLE_ADMIN'])
     @Transactional
     def save(AnswerMessage answerMessage) {
 
@@ -52,12 +56,12 @@ class AnswerMessageController {
         }
     }
 
-    @Secured(['ROLE_USER','ROLE_ADMIN'])
+    //@Secured(['ROLE_USER','ROLE_ADMIN'])
     def edit(AnswerMessage answerMessage) {
         respond answerMessage
     }
 
-    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    //@Secured(['ROLE_USER', 'ROLE_ADMIN'])
     @Transactional
     def update(AnswerMessage answerMessage) {
         if (answerMessage == null) {
@@ -97,7 +101,7 @@ class AnswerMessageController {
      * Add a new answer
      * @return
      */
-    @Secured(['ROLE_USER','ROLE_ADMIN'])
+    //@Secured(['ROLE_USER','ROLE_ADMIN'])
     @Transactional
     def add(){
         AnswerMessage item = new AnswerMessage(

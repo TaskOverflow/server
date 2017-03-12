@@ -26,7 +26,11 @@ class MyMessageController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    def show(MyMessage message) {
+        respond message
+    }
+
+    //@Secured(['ROLE_USER', 'ROLE_ADMIN'])
     @Transactional
     def save(MyMessage myMessage) {
 
@@ -55,7 +59,7 @@ class MyMessageController {
         }
     }
 
-    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    //@Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def edit(MyMessage myMessage) {
         respond myMessage
     }
@@ -91,7 +95,7 @@ class MyMessageController {
      * Modify the value of a message for gamification
      * @return
      */
-    @Secured(['ROLE_USER','ROLE_ADMIN'])
+    //@Secured(['ROLE_USER','ROLE_ADMIN'])
     @Transactional
     def vote(){
         MyMessage item = MyMessage.get(params.mId as Integer)

@@ -111,7 +111,7 @@ class UserController {
      * @param user
      * @return
      */
-    @Secured(['ROLE_ADMIN'])
+    //@Secured(['ROLE_ADMIN'])
     @Transactional
     def ban(User user){
 

@@ -1,5 +1,7 @@
 package ovh.garcon.tasko
 
+import grails.web.Controller
+
 /**
  * @author Benoît Garçon
  * @date Jan-2017
@@ -12,6 +14,7 @@ import grails.transaction.Transactional
  * Manage message for questions
  */
 @Transactional(readOnly = true)
+@Controller
 class QuestionMessageController {
 
     static responseFormats = ['json', 'xml']
@@ -20,6 +23,10 @@ class QuestionMessageController {
 
     def create() {
         respond new QuestionMessage(params)
+    }
+
+    def show(QuestionMessage message) {
+        respond message
     }
 
     @Transactional

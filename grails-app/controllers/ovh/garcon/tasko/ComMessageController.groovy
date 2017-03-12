@@ -26,13 +26,16 @@ class ComMessageController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+    def show(ComMessage message) {
+        respond message
+    }
 
-    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    //@Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def create() {
         respond new ComMessage(params)
     }
 
-    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    //@Secured(['ROLE_USER', 'ROLE_ADMIN'])
     @Transactional
     def save(ComMessage comMessage) {
         if (comMessage == null) {
@@ -70,7 +73,7 @@ class ComMessageController {
         }
     }
 
-    @Secured(['ROLE_USER','ROLE_ADMIN'])
+    //@Secured(['ROLE_USER','ROLE_ADMIN'])
     @Transactional
     def add(){
         ComMessage com = new ComMessage(

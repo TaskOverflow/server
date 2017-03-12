@@ -20,6 +20,10 @@ class ProfileController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+    def show(Profile profile) {
+        respond profile
+    }
+
     @Transactional
     def save(Profile profile) {
         if (profile == null) {
@@ -45,7 +49,7 @@ class ProfileController {
         }
     }
 
-    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    //@Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def edit(Profile profile) {
         respond profile
     }

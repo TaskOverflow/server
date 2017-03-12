@@ -37,12 +37,12 @@ class QuestionController {
         respond question
     }
 
-    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    //@Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def create() {
         respond new Question(question: new QuestionMessage())
     }
 
-    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    //@Secured(['ROLE_USER', 'ROLE_ADMIN'])
     @Transactional
     def save(Question question) {
 
@@ -74,7 +74,7 @@ class QuestionController {
         }
     }
 
-    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    //@Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def edit(Question question) {
         respond question
     }
@@ -126,7 +126,7 @@ class QuestionController {
         }
     }
 
-    @Secured(['ROLE_USER','ROLE_ADMIN'])
+    //@Secured(['ROLE_USER','ROLE_ADMIN'])
     @Transactional
     def solve(){
         Question item = Question.get(params.qId as Integer)

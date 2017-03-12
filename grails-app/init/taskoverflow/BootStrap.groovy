@@ -14,6 +14,7 @@ class BootStrap {
             def returnArray = [:]
             returnArray['id'] = it.id
             returnArray['question'] = it.question
+            returnArray['value'] = it.getValue()
             returnArray['title'] = it.title
             returnArray['isSolved'] = it.isSolved
             returnArray['user'] = it.user
@@ -22,10 +23,72 @@ class BootStrap {
             return returnArray
         }
 
+        JSON.registerObjectMarshaller(Tag) {
+            def returnArray = [:]
+            returnArray['id'] = it.id
+            returnArray['label'] = it.label
+            returnArray['questions'] = it.questions.collect{ [id: it.id, title: it.title] }
+
+            return returnArray
+        }
+
+        JSON.registerObjectMarshaller(Badge) {
+            def returnArray = [:]
+            returnArray['id'] = it.id
+            returnArray['label'] = it.label
+            returnArray['description'] = it.description
+            returnArray['value'] = it.value
+            returnArray['users'] = it.users.collect{ [id: it.id, username: it.username] }
+
+            return returnArray
+        }
+
+        JSON.registerObjectMarshaller(User) {
+            def returnArray = [:]
+            returnArray['id'] = it.id
+            returnArray['accountExpired'] = it.accountExpired
+            returnArray['accountLocked'] = it.accountLocked
+            returnArray['enabled'] = it.enabled
+            returnArray['messages'] = it.messages
+            returnArray['passwordExpired'] = it.passwordExpired
+            returnArray['profil'] = it.profil
+            returnArray['questions'] = it.questions
+            returnArray['username'] = it.username
+            returnArray['badges'] = it.badges
+            returnArray['reputation'] = it.getReputation()
+
+            return returnArray
+        }
+
+        JSON.registerObjectMarshaller(Profile) {
+            def returnArray = [:]
+            returnArray['id'] = it.id
+            returnArray['email'] = it.email
+            returnArray['firstname'] = it.firstname
+            returnArray['lastname'] = it.lastname
+            returnArray['image'] = it.image
+            returnArray['userid'] = it.user.id
+            returnArray['username'] = it.user.username
+
+            return returnArray
+        }
+
+        JSON.registerObjectMarshaller(MyMessage) {
+            def returnArray = [:]
+            returnArray['id'] = it.id
+            returnArray['content'] = it.content
+            returnArray['date'] = it.date.format('dd/MM/yyyy HH:mm')
+            returnArray['userid'] = it.user.id
+            returnArray['username'] = it.user.username
+            returnArray['value'] = it.value
+
+            return returnArray
+        }
+
         //definition of badges
-        def badgeSuperman = new Badge(label: "Superman", description: "badges.superman.desc", value: 10, users: []).save(failOnError: true)
-        def badgeHercule = new Badge(label: "Hercule", description: "badges.hercule.desc", value: 4, users: []).save(failOnError: true)
-        def badgeOne = new Badge(label: "N°1", description: "badges.nbone.desc", value: 4, users: []).save(failOnError: true)
+        def badgeSuperman = new Badge(label: "Superman", description: "badges_superman_desc", value: 10, users: []).save(failOnError: true)
+        def badgeHercule = new Badge(label: "Hercule", description: "badges_hercule_desc", value: 4, users: []).save(failOnError: true)
+        def badgeOne = new Badge(label: "N°1", description: "badges_nbone_desc", value: 4, users: []).save(failOnError: true)
 
         // security roles definition
         def userRole = Role.findByAuthority('ROLE_USER') ?: new Role(authority: 'ROLE_USER').save(failOnError: true)
