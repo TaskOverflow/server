@@ -14,6 +14,7 @@ class BootStrap {
             def returnArray = [:]
             returnArray['id'] = it.id
             returnArray['question'] = it.question
+            returnArray['answers'] = it.answers
             returnArray['value'] = it.getValue()
             returnArray['title'] = it.title
             returnArray['isSolved'] = it.isSolved
@@ -80,6 +81,35 @@ class BootStrap {
             returnArray['date'] = it.date.format('dd/MM/yyyy HH:mm')
             returnArray['userid'] = it.user.id
             returnArray['username'] = it.user.username
+            returnArray['userimage'] = it.user.profil.image
+            returnArray['value'] = it.value
+
+            return returnArray
+        }
+
+        JSON.registerObjectMarshaller(AnswerMessage) {
+            def returnArray = [:]
+            returnArray['id'] = it.id
+            returnArray['content'] = it.content
+            returnArray['date'] = it.date.format('dd/MM/yyyy HH:mm')
+            returnArray['userid'] = it.user.id
+            returnArray['username'] = it.user.username
+            returnArray['userimage'] = it.user.profil.image
+            returnArray['coms'] = it.coms
+            returnArray['value'] = it.value
+
+            return returnArray
+        }
+
+        JSON.registerObjectMarshaller(QuestionMessage) {
+            def returnArray = [:]
+            returnArray['id'] = it.id
+            returnArray['content'] = it.content
+            returnArray['date'] = it.date.format('dd/MM/yyyy HH:mm')
+            returnArray['userid'] = it.user.id
+            returnArray['username'] = it.user.username
+            returnArray['userimage'] = it.user.profil.image
+            returnArray['coms'] = it.coms
             returnArray['value'] = it.value
 
             return returnArray

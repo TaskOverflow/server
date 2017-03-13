@@ -29,6 +29,10 @@ class UserController {
         respond user
     }
 
+    def userid(User user) {
+        respond User.findWhere(username: user.username)
+    }
+
     def create() {
         respond new User(params)
     }
@@ -111,7 +115,7 @@ class UserController {
      * @param user
      * @return
      */
-    //@Secured(['ROLE_ADMIN'])
+    @Secured(['ROLE_ADMIN'])
     @Transactional
     def ban(User user){
 

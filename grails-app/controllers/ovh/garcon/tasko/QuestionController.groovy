@@ -126,10 +126,11 @@ class QuestionController {
         }
     }
 
-    //@Secured(['ROLE_USER','ROLE_ADMIN'])
+    @Secured(['ROLE_USER','ROLE_ADMIN'])
     @Transactional
     def solve(){
         Question item = Question.get(params.qId as Integer)
+        print(params.qId as Integer)
         item.setIsSolved(true)
 
         if (item == null) {

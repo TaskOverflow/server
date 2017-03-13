@@ -101,13 +101,14 @@ class AnswerMessageController {
      * Add a new answer
      * @return
      */
-    //@Secured(['ROLE_USER','ROLE_ADMIN'])
+    @Secured(['ROLE_USER','ROLE_ADMIN'])
     @Transactional
     def add(){
+
         AnswerMessage item = new AnswerMessage(
                 date: new Date(),
-                content: params.content,
-                user: (User)getAuthenticatedUser(),
+                content: params.text as String,
+                user: User.findById(params.uId as Integer),
                 value: 0,
                 question: Question.get(params.qId as Integer)
         )
