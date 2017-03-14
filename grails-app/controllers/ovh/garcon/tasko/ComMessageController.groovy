@@ -30,12 +30,12 @@ class ComMessageController {
         respond message
     }
 
-    //@Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def create() {
         respond new ComMessage(params)
     }
 
-    //@Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     @Transactional
     def save(ComMessage comMessage) {
         if (comMessage == null) {
@@ -73,13 +73,13 @@ class ComMessageController {
         }
     }
 
-    //@Secured(['ROLE_USER','ROLE_ADMIN'])
+    @Secured(['ROLE_USER','ROLE_ADMIN'])
     @Transactional
     def add(){
         ComMessage com = new ComMessage(
                 date: new Date(),
                 content: params.content,
-                user: (User)getAuthenticatedUser(),
+                user: User.findById(params.uId as Integer),
                 parentMessage: MyMessage.get(params.mId as Integer),
                 value: 0,
                 question: Question.get(params.qId as Integer)

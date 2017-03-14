@@ -83,6 +83,7 @@ class BootStrap {
             returnArray['username'] = it.user.username
             returnArray['userimage'] = it.user.profil.image
             returnArray['value'] = it.value
+            returnArray['questionid'] = it.question==null?'':it.question.id
 
             return returnArray
         }
@@ -97,6 +98,7 @@ class BootStrap {
             returnArray['userimage'] = it.user.profil.image
             returnArray['coms'] = it.coms
             returnArray['value'] = it.value
+            returnArray['questionid'] = it.question==null?'':it.question.id
 
             return returnArray
         }
@@ -111,6 +113,7 @@ class BootStrap {
             returnArray['userimage'] = it.user.profil.image
             returnArray['coms'] = it.coms
             returnArray['value'] = it.value
+            returnArray['questionid'] = it.question==null?'':it.question.id
 
             return returnArray
         }

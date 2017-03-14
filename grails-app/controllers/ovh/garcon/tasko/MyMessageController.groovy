@@ -30,7 +30,7 @@ class MyMessageController {
         respond message
     }
 
-    //@Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     @Transactional
     def save(MyMessage myMessage) {
 
@@ -65,6 +65,7 @@ class MyMessageController {
     }
 
     @Transactional
+    @Secured(['ROLE_USER','ROLE_ADMIN'])
     def update(MyMessage myMessage) {
         if (myMessage == null) {
             transactionStatus.setRollbackOnly()
@@ -95,7 +96,7 @@ class MyMessageController {
      * Modify the value of a message for gamification
      * @return
      */
-    //@Secured(['ROLE_USER','ROLE_ADMIN'])
+    @Secured(['ROLE_USER','ROLE_ADMIN'])
     @Transactional
     def vote(){
         MyMessage item = MyMessage.get(params.mId as Integer)

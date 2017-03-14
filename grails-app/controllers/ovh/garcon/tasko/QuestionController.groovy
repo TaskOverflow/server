@@ -37,12 +37,11 @@ class QuestionController {
         respond question
     }
 
-    //@Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def create() {
-        respond new Question(question: new QuestionMessage())
+        respond new Question(question: new QuestionMessage(), date: new Date())
     }
 
-    //@Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     @Transactional
     def save(Question question) {
 
@@ -63,7 +62,7 @@ class QuestionController {
                 title: question.title
         ).save(flush:true)
 
-        badgatorService.serviceMethod(QUE.getUserId()) // check badges
+        badgatorService.serviceMethod(user.id) // check badges
 
         request.withFormat {
             form multipartForm {

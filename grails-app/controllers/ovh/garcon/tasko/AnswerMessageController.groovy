@@ -27,7 +27,7 @@ class AnswerMessageController {
         respond message
     }
 
-    //@Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     @Transactional
     def save(AnswerMessage answerMessage) {
 
@@ -61,7 +61,7 @@ class AnswerMessageController {
         respond answerMessage
     }
 
-    //@Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     @Transactional
     def update(AnswerMessage answerMessage) {
         if (answerMessage == null) {
