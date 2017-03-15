@@ -33,6 +33,10 @@ class QuestionController {
         respond Question.list(params)?.sort{it.getValue()}?.reverse(true), model:[questionCount: Question.count()]
     }
 
+    def healthcheck() {
+        response.status = 200
+    }
+
     def show(Question question) {
         respond question
     }

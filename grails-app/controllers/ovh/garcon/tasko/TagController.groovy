@@ -23,6 +23,10 @@ class TagController {
         respond Tag.list(params), model:[tagCount: Tag.count()]
     }
 
+    def healthcheck() {
+        response.status = 200
+    }
+
     def show(Tag tag) {
         respond tag
     }

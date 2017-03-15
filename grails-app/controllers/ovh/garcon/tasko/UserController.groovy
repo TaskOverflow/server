@@ -29,6 +29,10 @@ class UserController {
         respond user
     }
 
+    def healthcheck() {
+        response.status = 200
+    }
+
     def userid(User user) {
         respond User.findWhere(username: user.username)
     }

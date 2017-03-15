@@ -27,6 +27,10 @@ class BadgeController {
         respond badge
     }
 
+    def healthcheck() {
+        response.status = 200
+    }
+
     @Transactional
     def save(Badge badge) {
         if (badge == null) {
